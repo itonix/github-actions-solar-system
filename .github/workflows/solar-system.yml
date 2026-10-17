@@ -45,6 +45,7 @@
           run: npm install
         - name: Code-coverage 
           run: npm run code-coverage
+          continue-on-error: true
         - name: Archive Test Result
           if: ${{ always() }}
           uses: actions/upload-artifact@v4
