@@ -66,6 +66,32 @@
             name: Code-Coverage-Result
             path: coverage
             retention-days: 5
-        
+    docker_login:
+       needs: [unit-testing, code-coverage]
+       runs-on: ubuntu-latest
+       
+       env:
+         REGISTRY: ghcr.io
+         IMAGE_NAME: ${{ github.repository }}
+         USER_NAME: itonix
+       permissions:
+        contents: read
+        packages: write
+
+       steps:
+       #step1
+       - uses: actions/checkout@v6
+         name: Checkout repository
+      #step2
+       - name: Log in to registry
+         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $USER_NAME --password-stdin
+      #step3
+       - name: Build and push
+         uses: docker/build-push-action@v7
+         with:
+           context: .
+           push: true
+           tags: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+
           
       
