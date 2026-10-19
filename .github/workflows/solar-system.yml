@@ -107,8 +107,7 @@
               exit 1
             fi
 
-            kubectl get pod solar -o wide
-        
+            kubectl get pod solar -o wide      
     integration-testing:
       needs: dev-deploy
       uses: ./.github/workflows/reusable-workflow.yml
