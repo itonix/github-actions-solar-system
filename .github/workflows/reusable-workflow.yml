@@ -3,9 +3,9 @@ on:
   workflow_call:
     inputs:
       ingress-url:
-        required: true
-        description: 'Provide the Ingress URL'
-        type: string
+          description: Provide the Ingress URL
+          required: true
+          type: string
 jobs:
   integration-test:
     runs-on: ubuntu-latest
