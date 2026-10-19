@@ -109,4 +109,7 @@
 
             kubectl get pod solar -o wide
         
-
+    integration-testing:
+      uses: ./.github/workflows/reusable-workflow.yml
+      with:
+        ingress-url: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL }}
