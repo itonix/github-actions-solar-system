@@ -87,27 +87,26 @@
       steps:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
-      - name: run
+
+      - name: Deploy Solar System on kind kubes 
         run: |
-- name: Deploy Solar System
-  run: |
-      REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
+            REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
 
-      kubectl run solar \
-        --image="ghcr.io/${REPO_OWNER_LC}/solar-system:${GITHUB_SHA}" \
-        --env="MONGO_URI=${MONGO_URI}" \
-        --env="MONGO_USERNAME=${MONGO_USERNAME}" \
-        --env="MONGO_PASSWORD=${MONGO_PASSWORD}"
+            kubectl run solar \
+              --image="ghcr.io/${REPO_OWNER_LC}/solar-system:${GITHUB_SHA}" \
+              --env="MONGO_URI=${MONGO_URI}" \
+              --env="MONGO_USERNAME=${MONGO_USERNAME}" \
+              --env="MONGO_PASSWORD=${MONGO_PASSWORD}"
 
-      if ! kubectl wait \
-        --for=condition=Ready pod/solar \
-        --timeout=180s; then
-        kubectl describe pod solar
-        kubectl logs solar || true
-        kubectl get events --sort-by=.metadata.creationTimestamp
-        exit 1
-      fi
+            if ! kubectl wait \
+              --for=condition=Ready pod/solar \
+              --timeout=180s; then
+              kubectl describe pod solar
+              kubectl logs solar || true
+              kubectl get events --sort-by=.metadata.creationTimestamp
+              exit 1
+            fi
 
-      kubectl get pod solar -o wide
+            kubectl get pod solar -o wide
         
 
