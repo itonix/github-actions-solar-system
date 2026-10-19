@@ -80,6 +80,8 @@
          tags: ghcr.io/${{ steps.lower.outputs.repo }}/solar-system:${{ github.sha }}
     dev-deploy:
       runs-on: ubuntu-latest
+      outputs:
+        APP_INGRESS_URL: ${{ steps.app-url.outputs.APP_INGRESS_URL }}
       environment:
         name: development
         url: URL
@@ -89,6 +91,7 @@
         uses: helm/kind-action@v1
 
       - name: Deploy Solar System on kind kubes 
+        id: app-url
         run: |
             REPO_OWNER_LC="${GITHUB_REPOSITORY_OWNER,,}"
 
@@ -107,7 +110,8 @@
               exit 1
             fi
 
-            kubectl get pod solar -o wide      
+            kubectl get pod solar -o wide
+            echo "APP_INGRESS_URL=http://solar-service:3000" >> "$GITHUB_OUTPUT"      
     
       # dev-deploy job
     integration-test:
